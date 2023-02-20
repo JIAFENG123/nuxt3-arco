@@ -1,13 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
 
-import { appRoutes } from './routes'
-import { NOT_FOUND_ROUTE, REDIRECT_MAIN } from './routes/base'
+// import { appRoutes } from './routes'
 import createRouteGuard from './guard'
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
-
+// NProgress.configure({ showSpinner: false }) // NProgress Configuration
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -23,14 +20,23 @@ const router = createRouter({
         requiresAuth: false,
       },
     },
-    ...appRoutes,
-    REDIRECT_MAIN,
-    NOT_FOUND_ROUTE,
+    // ...appRoutes,
+    // {
+    //   path: '/:pathMatch(.*)*',
+    //   name: 'notFound',
+    //   component: () => import('@/views/not-found/index.vue'),
+    // },
+    {
+      path: '/notFound',
+      name: 'notFound',
+      component: () => import('@/views/not-found/index.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }
   },
 })
+// 动态路由component
 
 createRouteGuard(router)
 

@@ -1,19 +1,14 @@
-export type RoleType = '' | '*' | 'admin' | 'user'
+interface tagItem {
+  tag: string
+  urId: number
+  urName: string
+}
 export interface UserState {
-  name?: string
-  avatar?: string
-  job?: string
-  organization?: string
-  location?: string
-  email?: string
-  introduction?: string
-  personalWebsite?: string
-  jobName?: string
-  organizationName?: string
-  locationName?: string
-  phone?: string
-  registrationDate?: string
-  accountId?: string
-  certification?: number
-  role: RoleType
+  token: string
+  name: string
+  workcode: string
+  systemCode: number
+  actionUrl: object[]
+  permissions: tagItem[] // 权限tags列表
+  isPermissionTag: boolean
 }

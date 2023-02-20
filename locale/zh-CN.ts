@@ -1,5 +1,8 @@
 import localeSettings from './zh-CN/settings'
+import localeCommon from './zh-CN/common'
+import localeLogin from '@/pages/login/locale/zh-CN'
 export default {
+  'home.menu': '首页',
   'menu.dashboard': '仪表盘',
   'menu.server.dashboard': '仪表盘-服务端',
   'menu.server.workplace': '工作台-服务端',
@@ -16,4 +19,6 @@ export default {
   'navbar.docs': '文档中心',
   'navbar.action.locale': '切换为中文',
   ...localeSettings,
+  ...localeLogin,
+  ...localeCommon,
 }

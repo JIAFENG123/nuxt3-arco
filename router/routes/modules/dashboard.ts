@@ -1,39 +1,26 @@
-import { DEFAULT_LAYOUT } from '../base'
 import type { AppRouteRecordRaw } from '../types'
+import { DEFAULT_LAYOUT } from '@/router/constants'
 
 const DASHBOARD: AppRouteRecordRaw = {
-  path: '/dashboard',
-  name: 'dashboard',
+  path: '/navigation',
+  name: 'navigation',
   component: DEFAULT_LAYOUT,
   meta: {
-    locale: 'menu.dashboard',
+    locale: 'common.navigation',
     requiresAuth: true,
     icon: 'icon-dashboard',
     order: 0,
   },
   children: [
     {
-      path: 'workplace',
-      name: 'Workplace',
-      component: () => import('@/views/dashboard/workplace/index.vue'),
+      path: '/systemNavigation',
+      name: 'systemNavigation',
+      component: () => import('@/views/home/index.vue'),
       meta: {
-        locale: 'menu.dashboard.workplace',
+        locale: 'common.navigation.systemNavigation',
         requiresAuth: true,
-        roles: ['*'],
       },
     },
-    /** simple */
-    {
-      path: 'monitor',
-      name: 'Monitor',
-      component: () => import('@/views/dashboard/monitor/index.vue'),
-      meta: {
-        locale: 'menu.dashboard.monitor',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
-    /** simple end */
   ],
 }
 

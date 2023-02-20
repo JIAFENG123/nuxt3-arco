@@ -1,6 +1,9 @@
 /** simple end */
 import localeSettings from './en-US/settings'
+import localeCommon from './en-US/common'
+import localeLogin from '@/pages/login/locale/en-US'
 export default {
+  'home.menu': 'Home',
   'menu.dashboard': 'Dashboard',
   'menu.server.dashboard': 'Dashboard-Server',
   'menu.server.workplace': 'Workplace-Server',
@@ -17,5 +20,7 @@ export default {
   'navbar.docs': 'Docs',
   'navbar.action.locale': 'Switch to English',
   ...localeSettings,
+  ...localeLogin,
+  ...localeCommon,
   /** simple end */
 }

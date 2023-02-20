@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
 import { Message } from '@arco-design/web-vue'
 import { useI18n } from 'vue-i18n'
 import { useClipboard } from '@vueuse/core'
@@ -45,18 +44,8 @@ const contentOpts = computed(() => [
     key: 'menu',
     defaultVal: appStore.menu,
   },
-  {
-    name: 'settings.topMenu',
-    key: 'topMenu',
-    defaultVal: appStore.topMenu,
-  },
   { name: 'settings.footer', key: 'footer', defaultVal: appStore.footer },
   { name: 'settings.tabBar', key: 'tabBar', defaultVal: appStore.tabBar },
-  {
-    name: 'settings.menuFromServer',
-    key: 'menuFromServer',
-    defaultVal: appStore.menuFromServer,
-  },
   {
     name: 'settings.menuWidth',
     key: 'menuWidth',

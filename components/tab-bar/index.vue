@@ -19,13 +19,10 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onUnmounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { RouteLocationNormalized } from 'vue-router'
 import tabItem from './tab-item.vue'
-import {
-  listenerRouteChange,
-  removeRouteListener,
-} from '@/utils/route-listener'
+import { listenerRouteChange } from '@/utils/route-listener'
 import { useAppStore, useTabBarStore } from '@/store'
 
 const appStore = useAppStore()
@@ -52,36 +49,37 @@ listenerRouteChange((route: RouteLocationNormalized) => {
   )
     tabBarStore.updateTabList(route)
 }, true)
-
-onUnmounted(() => {
-  removeRouteListener()
-})
 </script>
 
 <style scoped lang="less">
   .tab-bar-container {
     position: relative;
     background-color: var(--color-bg-2);
+
     .tab-bar-box {
       display: flex;
       padding: 0 0 0 20px;
       background-color: var(--color-bg-2);
       border-bottom: 1px solid var(--color-border);
+
       .tab-bar-scroll {
-        height: 32px;
         flex: 1;
+        height: 32px;
         overflow: hidden;
+
         .tags-wrap {
+          // height: 48px;
+          height: auto;
           padding: 4px 0;
-          height: 48px;
-          white-space: nowrap;
           overflow-x: auto;
+          white-space: nowrap;
 
           :deep(.arco-tag) {
             display: inline-flex;
             align-items: center;
             margin-right: 6px;
             cursor: pointer;
+
             &:first-child {
               .arco-tag-close-btn {
                 display: none;

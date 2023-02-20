@@ -1,21 +1,19 @@
 const TOKEN_KEY = 'token'
 
 const isLogin = () => {
-  return typeof window !== 'undefined' ? (localStorage && !!localStorage.getItem(TOKEN_KEY)) : false
+  return !!localStorage.getItem(TOKEN_KEY)
 }
 
 const getToken = () => {
-  return typeof window !== 'undefined' ? localStorage && localStorage.getItem(TOKEN_KEY) : ''
+  return localStorage.getItem(TOKEN_KEY)
 }
 
 const setToken = (token: string) => {
-  // eslint-disable-next-line no-unused-expressions
-  typeof window !== 'undefined' ? localStorage && localStorage.setItem(TOKEN_KEY, token) : null
+  localStorage.setItem(TOKEN_KEY, token)
 }
 
 const clearToken = () => {
-  // eslint-disable-next-line no-unused-expressions
-  typeof window !== 'undefined' ? localStorage && localStorage.removeItem(TOKEN_KEY) : null
+  localStorage.removeItem(TOKEN_KEY)
 }
 
 export { isLogin, getToken, setToken, clearToken }

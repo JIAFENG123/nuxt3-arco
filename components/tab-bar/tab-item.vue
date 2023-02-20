@@ -1,9 +1,5 @@
 <template>
-  <a-dropdown
-    trigger="contextMenu"
-    :popup-max-height="false"
-    @select="actionSelect"
-  >
+  <a-dropdown trigger="contextMenu" @select="actionSelect">
     <span
       class="arco-tag arco-tag-size-medium arco-tag-checked"
       :class="{ 'link-activated': itemData.fullPath === $route.fullPath }"
@@ -20,15 +16,7 @@
       </span>
     </span>
     <template #content>
-      <a-doption :disabled="disabledReload" :value="Eaction.reload">
-        <icon-refresh />
-        <span>重新加载</span>
-      </a-doption>
-      <a-doption
-        class="sperate-line"
-        :disabled="disabledCurrent"
-        :value="Eaction.current"
-      >
+      <a-doption :disabled="disabledCurrent" :value="Eaction.current">
         <icon-close />
         <span>关闭当前标签页</span>
       </a-doption>
@@ -36,11 +24,7 @@
         <icon-to-left />
         <span>关闭左侧标签页</span>
       </a-doption>
-      <a-doption
-        class="sperate-line"
-        :disabled="disabledRight"
-        :value="Eaction.right"
-      >
+      <a-doption :disabled="disabledRight" :value="Eaction.right">
         <icon-to-right />
         <span>关闭右侧标签页</span>
       </a-doption>
@@ -62,7 +46,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTabBarStore } from '@/store'
 import type { TagProps } from '@/store/modules/tab-bar/types'
-import { DEFAULT_ROUTE_NAME, REDIRECT_ROUTE_NAME } from '@/router/constants'
+import { DEFAULT_ROUTE_NAME } from '@/router/routes/index'
 
 const props = defineProps({
   itemData: {
@@ -78,7 +62,6 @@ const props = defineProps({
 })
 
 enum Eaction {
-  reload = 'reload',
   current = 'current',
   left = 'left',
   right = 'right',
@@ -95,10 +78,6 @@ const goto = (tag: TagProps) => {
 }
 const tagList = computed(() => {
   return tabBarStore.getTabList
-})
-
-const disabledReload = computed(() => {
-  return props.itemData.fullPath !== route.fullPath
 })
 
 const disabledCurrent = computed(() => {
@@ -124,7 +103,7 @@ const tagClose = (tag: TagProps, idx: number) => {
 const findCurrentRouteIndex = () => {
   return tagList.value.findIndex(el => el.fullPath === route.fullPath)
 }
-const actionSelect = async (value: any) => {
+const actionSelect = (value: any) => {
   const { itemData, index } = props
   const copyTagList = [...tagList.value]
   if (value === Eaction.current) {
@@ -153,16 +132,6 @@ const actionSelect = async (value: any) => {
     tabBarStore.freshTabList(filterList)
     router.push({ name: itemData.name })
   }
-  else if (value === Eaction.reload) {
-    tabBarStore.deleteCache(itemData)
-    await router.push({
-      name: REDIRECT_ROUTE_NAME,
-      params: {
-        path: route.fullPath,
-      },
-    })
-    tabBarStore.addCache(itemData.name)
-  }
   else {
     tabBarStore.resetTabList()
     router.push({ name: DEFAULT_ROUTE_NAME })
@@ -175,29 +144,32 @@ const actionSelect = async (value: any) => {
     color: var(--color-text-2);
     text-decoration: none;
   }
+
   .link-activated {
     color: rgb(var(--link-6));
+
     .tag-link {
       color: rgb(var(--link-6));
     }
+
     & + .arco-tag-close-btn {
       color: rgb(var(--link-6));
     }
   }
+
   :deep(.arco-dropdown-option-content) {
     span {
       margin-left: 10px;
     }
   }
+
   .arco-dropdown-open {
     .tag-link {
       color: rgb(var(--danger-6));
     }
+
     .arco-tag-close-btn {
       color: rgb(var(--danger-6));
     }
-  }
-  .sperate-line {
-    border-bottom: 1px solid var(--color-neutral-3);
   }
 </style>

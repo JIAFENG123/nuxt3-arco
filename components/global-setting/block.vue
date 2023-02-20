@@ -46,18 +46,9 @@ const handleChange = async ({
   key: string
   value: unknown
 }) => {
-  if (key === 'colorWeak')
-    // eslint-disable-next-line no-unused-expressions
-    typeof window !== 'undefined' ? document.body.style.filter = value ? 'invert(80%)' : 'none' : null
+  if (key === 'colorWeak' && typeof window !== 'undefined')
+    document.body.style.filter = value ? 'invert(80%)' : 'none'
 
-  if (key === 'menuFromServer' && value)
-    await appStore.fetchServerMenuConfig()
-
-  if (key === 'topMenu') {
-    appStore.updateSettings({
-      menuCollapse: false,
-    })
-  }
   appStore.updateSettings({ [key]: value })
 }
 </script>

@@ -3,35 +3,40 @@
     <div class="left-side">
       <a-space>
         <img
+          v-if="theme.value === 'light'"
+          class="logo"
           alt="logo"
-          src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
+          src="@/assets/images/logo-hei.png"
+        >
+        <img
+          v-else
+          class="logo"
+          alt="logo"
+          src="@/assets/images/logo-bai.png"
         >
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
         >
-          Arco Pro
+          {{ $t('common.system') }}
         </a-typography-title>
         <icon-menu-fold
-          v-if="!topMenu && appStore.device === 'mobile'"
+          v-if="appStore.device === 'mobile'"
           style="font-size: 22px; cursor: pointer"
           @click="toggleDrawerMenu"
         />
       </a-space>
     </div>
-    <div class="center-side">
-      <Menu v-if="topMenu" />
-    </div>
     <ul class="right-side">
-      <li>
+      <!-- <li>
         <a-tooltip :content="$t('settings.search')">
-          <a-button class="nav-btn" type="outline" shape="circle">
+          <a-button class="nav-btn" type="outline" :shape="'circle'">
             <template #icon>
               <icon-search />
             </template>
           </a-button>
         </a-tooltip>
-      </li>
+      </li> -->
       <li>
         <a-tooltip :content="$t('settings.language')">
           <a-button
@@ -45,7 +50,7 @@
             </template>
           </a-button>
         </a-tooltip>
-        <a-dropdown trigger="click" @select="changeLocale as any">
+        <a-dropdown trigger="click" @select="(changeLocale as any)">
           <div ref="triggerBtn" class="trigger-btn" />
           <template #content>
             <a-doption
@@ -53,9 +58,6 @@
               :key="item.value"
               :value="item.value"
             >
-              <template #icon>
-                <icon-check v-show="item.value === currentLocale" />
-              </template>
               {{ item.label }}
             </a-doption>
           </template>
@@ -64,7 +66,7 @@
       <li>
         <a-tooltip
           :content="
-            theme === 'light'
+            theme.value === 'light'
               ? $t('settings.navbar.theme.toDark')
               : $t('settings.navbar.theme.toLight')
           "
@@ -76,20 +78,20 @@
             @click="handleToggleTheme"
           >
             <template #icon>
-              <icon-moon-fill v-if="theme === 'dark'" />
+              <icon-moon-fill v-if="theme.value === 'dark'" />
               <icon-sun-fill v-else />
             </template>
           </a-button>
         </a-tooltip>
       </li>
-      <li>
+      <!-- <li>
         <a-tooltip :content="$t('settings.navbar.alerts')">
           <div class="message-box-trigger">
             <a-badge :count="9" dot>
               <a-button
                 class="nav-btn"
                 type="outline"
-                shape="circle"
+                :shape="'circle'"
                 @click="setPopoverVisible"
               >
                 <icon-notification />
@@ -103,12 +105,12 @@
           :content-style="{ padding: 0, minWidth: '400px' }"
           content-class="message-popover"
         >
-          <div ref="refBtn" class="ref-btn" />
+          <div ref="refBtn" class="ref-btn"></div>
           <template #content>
-            <MessageBox />
+            <message-box />
           </template>
         </a-popover>
-      </li>
+      </li> -->
       <li>
         <a-tooltip
           :content="
@@ -148,35 +150,12 @@
         <a-dropdown trigger="click">
           <a-avatar
             :size="32"
-            :style="{ marginRight: '8px', cursor: 'pointer' }"
+            :style="{ marginRight: '8px', cursor: 'pointer', backgroundColor: '#14a9f8' }"
           >
-            <img alt="avatar" :src="avatar">
+            <!-- <img alt="avatar" :src="avatar" /> -->
+            {{ avatarName }}
           </a-avatar>
           <template #content>
-            <a-doption>
-              <a-space @click="switchRoles">
-                <icon-tag />
-                <span>
-                  {{ $t('messageBox.switchRoles') }}
-                </span>
-              </a-space>
-            </a-doption>
-            <a-doption>
-              <a-space @click="$router.push({ name: 'Info' })">
-                <icon-user />
-                <span>
-                  {{ $t('messageBox.userCenter') }}
-                </span>
-              </a-space>
-            </a-doption>
-            <a-doption>
-              <a-space @click="$router.push({ name: 'Setting' })">
-                <icon-settings />
-                <span>
-                  {{ $t('messageBox.userSettings') }}
-                </span>
-              </a-space>
-            </a-doption>
             <a-doption>
               <a-space @click="handleLogout">
                 <icon-export />
@@ -193,27 +172,22 @@
 </template>
 
 <script lang="ts" setup>
-import { Message } from '@arco-design/web-vue'
-import MessageBox from '../message-box/index.vue'
 import { useAppStore, useUserStore } from '@/store'
 import { LOCALE_OPTIONS } from '@/locale'
 import useLocale from '@/hooks/locale'
 import useUser from '@/hooks/user'
-import Menu from '@/components/menu/index.vue'
-
 const appStore = useAppStore()
 const userStore = useUserStore()
 const { logout } = useUser()
-const { changeLocale, currentLocale } = useLocale()
+const { changeLocale } = useLocale()
 const { isFullscreen, toggle: toggleFullScreen } = useFullscreen()
 const locales = [...LOCALE_OPTIONS]
-const avatar = computed(() => {
-  return userStore.avatar
+const avatarName = computed(() => {
+  return userStore.name.substring(userStore.name.length - 2)
 })
-const theme = computed(() => {
-  return appStore.theme
-})
-const topMenu = computed(() => appStore.topMenu && appStore.menu)
+
+const theme = useColorMode()
+
 const isDark = useDark({
   selector: 'body',
   attribute: 'arco-theme',
@@ -227,37 +201,36 @@ const isDark = useDark({
 })
 const toggleTheme = useToggle(isDark)
 const handleToggleTheme = () => {
+  theme.preference = theme.value === 'dark' ? 'light' : 'dark'
   toggleTheme()
 }
 const setVisible = () => {
+  // console.log(proxy)
+  // console.log(proxy.$lodash._.indexOf([1, 2, 3], 2))
   appStore.updateSettings({ globalSettings: true })
 }
-const refBtn = ref()
+// const refBtn = ref()
 const triggerBtn = ref()
-const setPopoverVisible = () => {
-  const event = new MouseEvent('click', {
-    view: window,
-    bubbles: true,
-    cancelable: true,
-  })
-  refBtn.value.dispatchEvent(event)
-}
+// const setPopoverVisible = () => {
+//   const event = new MouseEvent('click', {
+//     view: window,
+//     bubbles: true,
+//     cancelable: true,
+//   })
+//   refBtn.value.dispatchEvent(event)
+// }
 const handleLogout = () => {
   logout()
 }
 const setDropDownVisible = () => {
   const event = new MouseEvent('click', {
-    view: window,
+    view: typeof window !== 'undefined' ? window : null,
     bubbles: true,
     cancelable: true,
   })
   triggerBtn.value.dispatchEvent(event)
 }
-const switchRoles = async () => {
-  const res = await userStore.switchRoles()
-  Message.success(res as string)
-}
-const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void
+const toggleDrawerMenu = inject('toggleDrawerMenu')
 </script>
 
 <style scoped lang="less">
@@ -272,20 +245,21 @@ const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void
   .left-side {
     display: flex;
     align-items: center;
-    padding-left: 20px;
-  }
-
-  .center-side {
-    flex: 1;
+    padding-left: 15px;
+    .logo {
+      width: 70px;
+    }
   }
 
   .right-side {
     display: flex;
-    padding-right: 20px;
+    padding-right: 15px;
     list-style: none;
+
     :deep(.locale-select) {
       border-radius: 20px;
     }
+
     li {
       display: flex;
       align-items: center;
@@ -296,16 +270,19 @@ const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void
       color: var(--color-text-1);
       text-decoration: none;
     }
+
     .nav-btn {
-      border-color: rgb(var(--gray-2));
       color: rgb(var(--gray-8));
       font-size: 16px;
+      border-color: rgb(var(--gray-2));
     }
+
     .trigger-btn,
     .ref-btn {
       position: absolute;
       bottom: 14px;
     }
+
     .trigger-btn {
       margin-left: 14px;
     }

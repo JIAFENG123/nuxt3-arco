@@ -25,9 +25,9 @@ export default function useResponsive(immediate?: boolean) {
       debounceFn()
   })
   onBeforeMount(() => {
-    addEventListen(window, 'resize', debounceFn)
+    addEventListen(typeof window !== 'undefined' ? window : null as any, 'resize', debounceFn)
   })
   onBeforeUnmount(() => {
-    removeEventListen(window, 'resize', debounceFn)
+    removeEventListen(typeof window !== 'undefined' ? window : null as any, 'resize', debounceFn)
   })
 }

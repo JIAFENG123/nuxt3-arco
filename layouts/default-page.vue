@@ -42,10 +42,11 @@
       </a-layout>
     </a-layout>
   </a-layout>
+  <global-setting />
 </template>
 
 <script lang="ts" setup>
-import PageLayout from './page-layout.vue'
+import PageLayout from '../components/page-layout.vue'
 import { useAppStore, useUserStore } from '@/store'
 import NavBar from '@/components/navbar/index.vue'
 import Menu from '@/components/menu/index.vue'
@@ -85,13 +86,13 @@ const setCollapsed = (val: boolean) => {
     return // for page initialization menu state problem
   appStore.updateSettings({ menuCollapse: val })
 }
-watch(
-  () => userStore.role,
-  (roleValue) => {
-    if (roleValue && !permission.accessRouter(route))
-      router.push({ name: 'notFound' })
-  },
-)
+// watch(
+//   () => userStore.role,
+//   (roleValue) => {
+//     if (roleValue && !permission.accessRouter(route))
+//       router.push({ name: 'notFound' })
+//   },
+// )
 const drawerVisible = ref(false)
 const drawerCancel = () => {
   drawerVisible.value = false

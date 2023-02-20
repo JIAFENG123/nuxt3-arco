@@ -1,9 +1,10 @@
 <template>
-  index
+  <div />
 </template>
 
-<script setup lang="ts">
-definePageMeta({
-  layout: 'default-page',
-})
+<script lang='ts' setup>
 </script>
+
+<style scoped>
+
+</style>
